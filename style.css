@@ -1,0 +1,148 @@
+html, body {
+    padding: 10px;
+}
+#dnd {
+    text-align: center;
+    border: 3px dashed #a5a5a5;
+    color: #a5a5a5;
+    font-weight: bold;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    padding: 50px 10px;
+    box-sizing: border-box;
+    margin-top: 10px;
+}
+#dnd_parsing {
+    display: none;
+}
+input[type="file"] {
+    height: 0.1px;
+    color: #ffffff;
+    width: 0.1px;
+    border: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    font-size: 0.1px;
+    z-index: -1;
+    overflow: hidden;
+    opacity: 0;
+}
+#message-container {
+    margin-top: 10px;
+}
+.message {
+    box-sizing: border-box;
+    border: 1px solid;
+    margin: 3px 0;
+}
+.message .title {
+    display: block;
+    line-height: 20px;
+    padding: 5px 15px 5px 5px;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+}
+.message .checkbox + .message .title {
+    margin-left: 30px;
+}
+.message .title:after {
+    content: '+';
+    display: block;
+    float: right;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 20px;
+    padding-left: 10px;
+    right: 0;
+}
+.message.open .title:after {
+    content: '-';
+}
+.message.success {
+    background-color: #9bf7a6;
+    border-color: #72b579;
+}
+.message.error, #close-btn {
+    background-color: #f79b9b;
+    border-color: #b57272;
+}
+.message.warn {
+    background-color: #e5df90;
+    border-color: #b5b072;
+}
+.message ul {
+    visibility: hidden;
+    height: 0;
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+}
+.message.open ul {
+    visibility: visible;
+    height: auto;
+}
+.message ul li {
+    padding: 3px 5px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    height: 20px;
+    line-height: 20px;
+    display: block;
+    max-width: 300px;
+}
+.message ul li:before {
+    content: '\002713';
+    margin-right: 5px;
+}
+.message ul li.success {
+    background-color: #9bf7a6;
+}
+.message ul li.error {
+    background-color: #f79b9b;
+}
+.message ul li.error:before {
+    content: '\002715';
+}
+.message ul.no-icon li:before {
+    content: '' !important;
+}
+.message ul li .domain {
+    float: right;
+}
+.message ul li img {
+    width: 16px;
+    vertical-align: middle;
+    margin-right: 5px;
+}
+.message .checkbox {
+    width: 20px;
+    height: 20px;
+    float: left;
+    padding: 5px;
+}
+.message .checkbox .inner {
+    border-radius: 2px;
+    background-color: #fdfacd;
+    height: 100%;
+    width: 100%;
+    line-height: 20px;
+    text-align: center;
+    cursor: pointer;
+}
+.message .checkbox .inner.selected:before {
+    content: '\002714';
+}
+#close-btn {
+    padding: 5px;
+    text-align: center;
+    cursor: pointer;
+    margin: 5px 0;
+    border: 1px solid;
+}

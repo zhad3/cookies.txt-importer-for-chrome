@@ -1,0 +1,46 @@
+{
+    "appDesc": {
+        "description": "Description of the extension",
+        "message": "Import cookies.txt in netscape format."
+    },
+    "appName": {
+        "description": "Name of the extension",
+        "message": "cookies.txt importer"
+    },
+    "htmlParsingMessage": {
+        "description": "Message inside the options page when parsing a page",
+        "message": "Parsing files, please wait..."
+    },
+    "htmlReadyMessage": {
+        "description": "Message inside the options page when you can upload a file",
+        "message": "Drop cookies.txt files here or "
+    },
+    "htmlSelectManually": {
+        "description": "Message for selecting files manually",
+        "message": "select them manually"
+    },
+    "error": {
+        "description": "Error",
+        "message": "Error"
+    },
+    "errorFilesize": {
+        "description": "Error message when filesize is too big",
+        "message": "Filesize >100 KB"
+    },
+    "errorEmpty": {
+        "descrption": "Error message when file is empty",
+        "message": "Empty file"
+    },
+    "errorSyntax": {
+        "description": "Error message when a line couldn't be parsed",
+        "message": "Syntax error"
+    },
+    "line": {
+        "description": "Line at which the errors above occured",
+        "message": "Line"
+    },
+    "closeButton": {
+        "description": "Button text to close the window",
+        "message": "Click here to quickly close the extension tab"
+    }
+}
