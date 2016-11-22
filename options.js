@@ -290,7 +290,7 @@ function closeWindow(e) {
 document.addEventListener('DOMContentLoaded', function() {
     chrome.storage.local.get('referer_tab', function(obj) {
         var referer_id = null;
-        if (!chrome.runtime.lastError) {
+        if (!chrome.runtime.lastError && obj.referer_tab) {
             referer_id = obj.referer_tab.id;
         }
         chrome.cookies.getAllCookieStores(function(stores) {
