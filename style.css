@@ -1,5 +1,6 @@
 html, body {
     padding: 10px;
+    min-width: 400px;
 }
 #dnd {
     text-align: center;

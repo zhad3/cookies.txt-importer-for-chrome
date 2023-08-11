@@ -15,8 +15,8 @@ function getParentByClassName(elem, className) {
 
 function toggleDropdown(e) {
     e.preventDefault();
-    var classes = e.currentTarget.parentNode.className.split(' ');
-    var idx = classes.indexOf('close');
+    const classes = e.currentTarget.parentNode.className.split(' ');
+    const idx = classes.indexOf('close');
     if (idx != -1) {
         classes[idx] = 'open';
     } else {
@@ -26,10 +26,10 @@ function toggleDropdown(e) {
 }
 
 function selectStorage(storage_id) {
-    var container = document.getElementById('storage-container');
+    const container = document.getElementById('storage-container');
     container.setAttribute('data-storage', storage_id);
-    for (var c = 0; c < container.children.length; c++) {
-        var child = container.children[c];
+    for (let c = 0; c < container.children.length; c++) {
+        const child = container.children[c];
         if (child.getAttribute('data-id') == storage_id) {
             child.getElementsByClassName('inner')[0].className = 'inner selected';
         } else {
@@ -40,7 +40,7 @@ function selectStorage(storage_id) {
 
 function setStorageData(e) {
     e.preventDefault();
-    var storage_div = getParentByClassName(e.currentTarget, 'message');
+    const storage_div = getParentByClassName(e.currentTarget, 'message');
     selectStorage(storage_div.getAttribute('data-id'));
 }
 
@@ -59,7 +59,7 @@ function isParsing(on) {
     }
 }
 
-var CookieFile = function(filename, isCookieStorage=false) {
+const CookieFile = function(filename, isCookieStorage=false) {
     this.filename = filename;
     this.cookies = [];
     this.numfail = 0;
@@ -68,8 +68,8 @@ var CookieFile = function(filename, isCookieStorage=false) {
     this.div.className = 'message warn close';
 
     if (isCookieStorage) {
-        var checkbox = document.createElement('div');
-        var checkbox_inner = document.createElement('div');
+        const checkbox = document.createElement('div');
+        const checkbox_inner = document.createElement('div');
         checkbox.className = 'checkbox';
         checkbox_inner.className = 'inner';
         checkbox_inner.addEventListener('click', setStorageData);
@@ -77,14 +77,14 @@ var CookieFile = function(filename, isCookieStorage=false) {
         this.div.appendChild(checkbox);
     }
 
-    var title = document.createElement('span');
+    const title = document.createElement('span');
     title.className = 'title';
     title.appendChild(document.createTextNode(this.filename));
 
     title.addEventListener('click', toggleDropdown, false);
     this.div.appendChild(title);
 
-    var cookielist = document.createElement('ul');
+    const cookielist = document.createElement('ul');
     if (this.isCookieStorage) {
         cookielist.className = "no-icon";
     }
@@ -98,12 +98,12 @@ CookieFile.prototype.addCookie = function(cookie,err=false) {
 
     this.cookies.push(cookie);
 
-    var cookielist = this.div.getElementsByTagName('ul')[0];
-    var cookieitem = document.createElement('li');
+    const cookielist = this.div.getElementsByTagName('ul')[0];
+    const cookieitem = document.createElement('li');
     if (!this.isCookieStorage) {
         cookieitem.className = cookie.error ? 'error' : 'success';
     }
-    var domain = document.createElement('span');
+    const domain = document.createElement('span');
     domain.className = 'domain';
     if (cookie.error2 != undefined) {
         domain.title = cookie.error2;
@@ -111,7 +111,7 @@ CookieFile.prototype.addCookie = function(cookie,err=false) {
     if (!this.isCookieStorage) {
         domain.appendChild(document.createTextNode(cookie.domain));
     } else if (cookie.domain && cookie.domain.substr(0,9) != 'chrome://' && cookie.domain.substr(0,19) != 'chrome-extension://') {
-        var favicon = document.createElement('img');
+        const favicon = document.createElement('img');
         favicon.src = cookie.domain;
         cookieitem.appendChild(favicon);
     }
@@ -121,7 +121,7 @@ CookieFile.prototype.addCookie = function(cookie,err=false) {
     cookielist.appendChild(cookieitem);
 };
 CookieFile.prototype.render = function() {
-    var cstatus = 'success';
+    let cstatus = 'success';
     if (this.numfail == this.cookies.length) {
         cstatus = 'error';
     } else if (this.numfail > 0) {
@@ -147,15 +147,27 @@ function setCookie(line, cookie_file, cookie_obj, callback) {
 }
 
 function importCookies(files) {
-    var dnd = document.getElementById('dnd');
-    var message = document.getElementById('message-container');
-    var parsed_files = 0;
-    var storage_id = document.getElementById('storage-container').getAttribute('data-storage');
+    const dnd = document.getElementById('dnd');
+    const message = document.getElementById('message-container');
+    let parsed_files = 0;
+    const storage_id = document.getElementById('storage-container').getAttribute('data-storage');
     message.style.display='block';
     isParsing(true);
-    for (var i = 0, f; f = files[i]; i++) {
+
+    const doneParsingAllFiles = () => {
+        isParsing(false);
+        // Since the popup closes after losing window focus
+        // we save the latest loading status to give the user
+        // a chance to inspect potential errors
+        chrome.storage.local.set({
+            'last_import':document.getElementById('message-container').innerHTML,
+            'last_import_time':Math.floor(Date.now() / 1000)
+        });
+    };
+
+    for (let i = 0, f; f = files[i]; i++) {
         if (f.size > 1024 * 100) {
-            var cookie_file = new CookieFile(f.name);
+            const cookie_file = new CookieFile(f.name);
             cookie_file.addCookie({'name':i18n('error')+': '+i18n('errorFilesize'), 'domain':''}, true);
             message.appendChild(cookie_file.div);
             cookie_file.render();
@@ -163,26 +175,26 @@ function importCookies(files) {
             continue;
         }
 
-        var reader = new FileReader();
+        const reader = new FileReader();
         reader.onload = (function(file) {
-            var cookie_file = new CookieFile(file.name);
-            var parsed_lines = 0;
+            const cookie_file = new CookieFile(file.name);
+            let parsed_lines = 0;
             message.appendChild(cookie_file.div);
             return function(e) {
-                var lines = e.target.result.split(/[\r\n]+/g);
+                const lines = e.target.result.split(/[\r\n]+/g);
                 if (lines.length == 1 && lines[0] == '') {
                     cookie_file.addCookie({'name':i18n('error')+': '+i18n('errorEmpty'), 'domain':''}, true);
                     lines = []; // Skip line parsing, this will also make lines.length == 0 for the finish check
                 }
-                for (var a = 0; a < lines.length; a++) {
-                    var l = lines[a];
+                for (let a = 0; a < lines.length; a++) {
+                    const l = lines[a];
                     // Line is a comment or empty
                     if ((l.length > 0 && l.charAt(0) == '#') || l.length == 0) {
                         parsed_lines++;
                         cookie_file.update('(' + parsed_lines + '/' + lines.length + ')');
                         continue;
                     }
-                    var fields = l.split('\t');
+                    const fields = l.split('\t');
                     // Netscape format always has 7 fields
                     if (fields.length != 7) {
                         parsed_lines++;
@@ -190,8 +202,8 @@ function importCookies(files) {
                         cookie_file.update('(' + parsed_lines + '/' + lines.length + ')');
                         continue;
                     }
-                    var url = 'http'+(fields[3]=='TRUE'?'s':'')+'://' + fields[0].replace(/^\./,'') + fields[2];
-                    var cookie_obj = {
+                    const url = 'http'+(fields[3]=='TRUE'?'s':'')+'://' + fields[0].replace(/^\./,'') + fields[2];
+                    const cookie_obj = {
                         'url': url,
                         'name': fields[5],
                         'value': fields[6],
@@ -217,10 +229,9 @@ function importCookies(files) {
                             parsed_files++;
                         }
                         if (parsed_files == files.length) {
-                            isParsing(false);
-                        }   
+                            doneParsingAllFiles();
+                        }
                     });
-                    
                 }
                 // Finished all line parsing
                 if (parsed_lines == lines.length) {
@@ -228,7 +239,7 @@ function importCookies(files) {
                     parsed_files++;
                 }
                 if (parsed_files == files.length) {
-                    isParsing(false);
+                    doneParsingAllFiles();
                 }
             };
         })(f);
@@ -237,7 +248,7 @@ function importCookies(files) {
     }
 
     if (parsed_files == files.length) {
-        isParsing(false);
+        doneParsingAllFiles();
     }
 }
 
@@ -264,10 +275,10 @@ function dndDrop(e) {
 }
 
 function parseTabs(store, referer_id=null, callback) {
-    var storage_list = new CookieFile('Cookie storage #'+store.id, true);
+    const storage_list = new CookieFile('Cookie storage #'+store.id, true);
     storage_list.div.setAttribute('data-id', store.id);
     document.getElementById('storage-container').appendChild(storage_list.div);
-    for (var t = 0; t < store.tabIds.length; t++) {
+    for (let t = 0; t < store.tabIds.length; t++) {
         chrome.tabs.get(store.tabIds[t], function(tab) {
             if (referer_id && tab.id == referer_id) {
                 selectStorage(store.id);
@@ -278,24 +289,15 @@ function parseTabs(store, referer_id=null, callback) {
     }
 }
 
-function closeWindow(e) {
-    e.preventDefault();
-    chrome.tabs.query({'currentWindow':true, 'active':true}, function(tab) {
-        if (tab && !chrome.runtime.error) {
-            chrome.tabs.remove(tab[0].id, function() {});
-        }
-    });
-}
-
 document.addEventListener('DOMContentLoaded', function() {
-    chrome.storage.local.get('referer_tab', function(obj) {
-        var referer_id = null;
-        if (!chrome.runtime.lastError && obj.referer_tab) {
-            referer_id = obj.referer_tab.id;
+    chrome.tabs.query({'currentWindow':true, 'active':true}, function(tab) {
+        let referer_id = null;
+        if (!chrome.runtime.lastError && tab && tab instanceof Array && tab.length > 0) {
+            referer_id = tab[0].id;
         }
         chrome.cookies.getAllCookieStores(function(stores) {
-            var parsed_stores = 0;
-            for (var i = 0; i < stores.length; i++) {
+            let parsed_stores = 0;
+            for (let i = 0; i < stores.length; i++) {
                 parseTabs(stores[i], referer_id, function() {
                     parsed_stores++;
                     // Referer was undefined, select first storage
@@ -306,24 +308,45 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
-    
-    var dnd_parsing = document.getElementById('dnd_parsing');
-    var dnd_ready = document.getElementById('dnd_ready');
+
+    const dnd_parsing = document.getElementById('dnd_parsing');
+    const dnd_ready = document.getElementById('dnd_ready');
     dnd_parsing.innerHTML = i18n('htmlParsingMessage');
     dnd_ready.innerHTML = '';
     dnd_ready.appendChild(document.createTextNode(i18n('htmlReadyMessage')));
-    var manual_link = document.createElement('a');
+    const manual_link = document.createElement('a');
     manual_link.href = '#';
     manual_link.addEventListener('click', open_file_dialog);
     manual_link.appendChild(document.createTextNode(i18n('htmlSelectManually')));
     dnd_ready.appendChild(manual_link);
 
     document.getElementById('files').addEventListener('change', fileSelect);
-    var dnd = document.getElementById("dnd");
+    const dnd = document.getElementById("dnd");
     dnd.addEventListener('dragover', dndOver);
     dnd.addEventListener('drop', dndDrop);
 
-    var closeBtn = document.getElementById('close-btn');
-    closeBtn.addEventListener('click', closeWindow);
-    closeBtn.innerHTML = i18n('closeButton');
+    document.getElementById('last-imported-label').innerText = i18n('lastImportLabel');
+
+    // Load last import if it exist
+    chrome.storage.local.get(["last_import_time", "last_import"], function(data) {
+        const messageContainer = document.getElementById('message-container-last');
+        if (data && data.last_import_time) {
+            const now = Math.floor(Date.now() / 1000);
+            // If data is older than 10 minutes we clear it out
+            if (data.last_import_time + (60 * 10) < now) {
+                chrome.storage.local.clear();
+            } else if (data.last_import) {
+                messageContainer.innerHTML = data.last_import;
+                const files = messageContainer.getElementsByClassName('title');
+                for (let i = 0; i < files.length; ++i) {
+                    files[i].addEventListener('click', toggleDropdown);
+                }
+            } else {
+                messageContainer.innerHTML = i18n('lastImportEmpty');
+            }
+        } else {
+            messageContainer.innerHTML = i18n('lastImportEmpty');
+        }
+    });
 });
+

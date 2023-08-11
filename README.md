@@ -9,6 +9,7 @@ See [The Unofficial Cookie FAQ](http://www.cookiecentral.com/faq/#3.5) for more 
 ![Screenshot01](/screenshots/preview01.png)![Screenshot02](/screenshots/preview02.png)
 
 ## Notes
+* 2023-08-14 Manifest V3 support is the default. The older Manifest V2 is archived in the branch `manifest_v2`.
 * Even though the screenshots are in german, the extension is available in english.
 * Feel free to upload this to the Chrome Web Store if you have a developer account, i am not willing to get a credit card for a mere activation.
     * You can find some logos that are in the right format for the web store in the screenshots folder (make sure to remove them from the zip when uploading)

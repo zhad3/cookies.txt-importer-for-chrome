@@ -42,5 +42,13 @@
     "closeButton": {
         "description": "Button text to close the window",
         "message": "Click here to quickly close the extension tab"
+    },
+    "lastImportLabel": {
+        "description": "Label of the last imported cookies",
+        "message": "Last imported:"
+    },
+    "lastImportEmpty": {
+        "description": "Message to display if there is no last imported cookies",
+        "message": "Empty"
     }
 }

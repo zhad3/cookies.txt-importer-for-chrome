@@ -42,5 +42,13 @@
     "closeButton": {
         "description": "Button text to close the window",
         "message": "Klicke hier um das Erweiterungsfenster schnell zu schließen"
+    },
+    "lastImportLabel": {
+        "description": "Label of the last imported cookies",
+        "message": "Zuletzt importiert:"
+    },
+    "lastImportEmpty": {
+        "description": "Message to display if there is no last import",
+        "message": "Leer"
     }
 }
