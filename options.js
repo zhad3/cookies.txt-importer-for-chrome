@@ -187,7 +187,7 @@ function importCookies(files) {
                     lines = []; // Skip line parsing, this will also make lines.length == 0 for the finish check
                 }
                 for (let a = 0; a < lines.length; a++) {
-                    const l = lines[a];
+                    const l = lines[a].replace('#HttpOnly_','');
                     // Line is a comment or empty
                     if ((l.length > 0 && l.charAt(0) == '#') || l.length == 0) {
                         parsed_lines++;
