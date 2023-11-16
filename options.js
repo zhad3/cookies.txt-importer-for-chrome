@@ -187,6 +187,7 @@ function importCookies(files) {
                     lines = []; // Skip line parsing, this will also make lines.length == 0 for the finish check
                 }
                 for (let a = 0; a < lines.length; a++) {
+                    const httpOnly = lines[a].startsWith('#HttpOnly_');
                     const l = lines[a].replace('#HttpOnly_','');
                     // Line is a comment or empty
                     if ((l.length > 0 && l.charAt(0) == '#') || l.length == 0) {
@@ -209,7 +210,8 @@ function importCookies(files) {
                         'value': fields[6],
                         'domain': fields[0],
                         'path': fields[2],
-                        'secure': fields[3]=='TRUE'?true:false
+                        'secure': fields[3]=='TRUE'?true:false,
+                        'httpOnly': httpOnly
                     };
                     if (parseInt(fields[4]) > 0) {
                         cookie_obj.expirationDate = parseInt(fields[4]);
